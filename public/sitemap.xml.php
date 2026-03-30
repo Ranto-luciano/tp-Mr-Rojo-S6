@@ -11,9 +11,13 @@ header('Content-Type: application/xml; charset=utf-8');
 
 $baseUrl = app_base_url();
 
+$categoryModel = new Models\Category();
+$articleModel = new Models\Article();
+
+// Récupération des données
 $staticPaths = ['/', '/search'];
-$categories = category_all_with_counts();
-$articles = article_sitemap_items();
+$categories = $categoryModel->category_all_with_counts();
+$articles = $articleModel->article_sitemap_items();
 
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 ?>

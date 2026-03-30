@@ -1,9 +1,9 @@
 <?php
-$host = getenv('DB_HOST') ?: 'localhost';
+$host = getenv('DB_HOST') ?: 'db';
 $port = getenv('DB_PORT') ?: '5432';
 $dbname = getenv('DB_NAME') ?: 'iran_news';
 $user = getenv('DB_USER') ?: 'postgres';
-$password = getenv('DB_PASSWORD') ?: 'root';
+$password = getenv('DB_PASSWORD') ?: 'postgres';
 
 $dsn = "pgsql:host=$host;port=$port;dbname=$dbname;";
 

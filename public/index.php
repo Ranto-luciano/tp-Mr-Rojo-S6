@@ -1,44 +1,43 @@
 <?php
 /**
  * Front Controller - Point d'entrée unique de l'application
- * Toutes les requêtes passent par ce fichier
  */
 
-// Active l'affichage des erreurs en développement
-// À désactiver en production
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Démarrage de la session
 session_start();
 
-// Autoloader simple pour charger les classes automatiquement
+// Autoloader simple - Correction du chemin
 spl_autoload_register(function ($class) {
-    // Transforme le namespace en chemin de fichier
-    // Exemple: Core\Database devient src/Core/Database.php
+    // Le fichier est dans src/ avec le même namespace
     $file = __DIR__ . '/../src/' . str_replace('\\', '/', $class) . '.php';
     
     if (file_exists($file)) {
         require $file;
+    } else {
+        // Debug : afficher le chemin cherché
+        error_log("Fichier non trouvé : " . $file);
     }
 });
 
-// Récupère l'URL demandée
-// Exemple: /admin/articles/12/edit devient 'admin/articles/12/edit'
+// Récupérer l'URL - Support pour Apache et Nginx
 $url = $_GET['url'] ?? '';
+// Si l'URL est vide mais que REQUEST_URI contient quelque chose
+if (empty($url) && isset($_SERVER['REQUEST_URI'])) {
+    $requestUri = $_SERVER['REQUEST_URI'];
+    $scriptName = $_SERVER['SCRIPT_NAME'];
+    $url = trim(str_replace($scriptName, '', $requestUri), '/');
+    // Supprimer les paramètres de requête
+    $url = strtok($url, '?');
+}
 
-// Initialise le routeur
 $router = new Core\Router();
 
 // Routes du backoffice
-// Format: méthode HTTP, URL, Contrôleur@méthode
-
-// Authentification
 $router->get('/admin/login', 'AuthController@showLogin');
 $router->post('/admin/login', 'AuthController@login');
 $router->get('/admin/logout', 'AuthController@logout');
-
-// Dashboard
 $router->get('/admin/dashboard', 'DashboardController@index');
 
 // Gestion des articles
@@ -71,6 +70,8 @@ $router->get('/admin/users/profile', 'UserController@profile');
 $router->post('/admin/users/profile/update', 'UserController@updateProfile');
 $router->post('/admin/users/profile/password', 'UserController@changePassword');
 
-// Dispatch la requête
+// Route pour la page d'accueil
+$router->get('/', 'HomeController@index');
+
 $method = $_SERVER['REQUEST_METHOD'];
 $router->dispatch($url, $method);
