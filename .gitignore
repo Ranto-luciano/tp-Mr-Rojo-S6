@@ -5,6 +5,7 @@
 
 # Dependencies
 vendor/
+docs/resume.txt
 
 # Runtime data
 storage/logs/*.log
