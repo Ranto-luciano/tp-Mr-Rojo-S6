@@ -1,0 +1,48 @@
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+CREATE TABLE IF NOT EXISTS users (
+	id SERIAL PRIMARY KEY,
+	full_name VARCHAR(120) NOT NULL,
+	email VARCHAR(180) UNIQUE NOT NULL,
+	password_hash TEXT NOT NULL,
+	role VARCHAR(20) NOT NULL DEFAULT 'admin',
+	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS categories (
+	id SERIAL PRIMARY KEY,
+	name VARCHAR(120) UNIQUE NOT NULL,
+	slug VARCHAR(140) UNIQUE NOT NULL,
+	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS articles (
+	id SERIAL PRIMARY KEY,
+	category_id INT NOT NULL REFERENCES categories(id) ON DELETE RESTRICT,
+	author_id INT NOT NULL REFERENCES users(id) ON DELETE RESTRICT,
+	title VARCHAR(220) NOT NULL,
+	slug VARCHAR(240) UNIQUE NOT NULL,
+	excerpt TEXT,
+	content TEXT NOT NULL,
+	meta_title VARCHAR(220),
+	meta_description VARCHAR(320),
+	is_published BOOLEAN NOT NULL DEFAULT FALSE,
+	published_at TIMESTAMP,
+	created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+	updated_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE IF NOT EXISTS article_images (
+	id SERIAL PRIMARY KEY,
+	article_id INT NOT NULL REFERENCES articles(id) ON DELETE CASCADE,
+	file_path TEXT NOT NULL,
+	alt_text VARCHAR(255) NOT NULL,
+	sort_order INT NOT NULL DEFAULT 0,
+	created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_articles_slug ON articles(slug);
+CREATE INDEX IF NOT EXISTS idx_articles_category_id ON articles(category_id);
+CREATE INDEX IF NOT EXISTS idx_article_images_article_id ON article_images(article_id);

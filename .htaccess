@@ -1,0 +1,5 @@
+RewriteEngine On
+
+# Send all traffic to /public if project root is exposed by web server.
+RewriteCond %{REQUEST_URI} !^/public/
+RewriteRule ^(.*)$ public/$1 [L]

@@ -1,0 +1,140 @@
+projet-iran-news/
+│
+├── docker-compose.yml                # PHP + Nginx/Apache + PostgreSQL
+├── Dockerfile                        # Image PHP (pdo_pgsql, extensions)
+├── .dockerignore
+├── .env.example                      # Variables d'environnement (sans secrets)
+├── .gitignore
+├── README.md
+├── .htaccess                         # URL rewriting (si Apache)
+│
+├── docs/
+│   ├── structure.txt
+│   ├── technical-report.md           # Livrable technique
+│   ├── screenshots/
+│   │   ├── frontoffice-home.png
+│   │   └── backoffice-dashboard.png
+│   └── db-model/
+│       ├── erd.png
+│       └── schema-description.md
+│
+├── sql/
+│   ├── 001_init_schema.sql           # Tables: users, categories, articles, images
+│   ├── 002_seed_data.sql             # Donnees de demo
+│   └── migrations/                   # Evolutions du schema
+│
+├── config/
+│   ├── app.php                       # Config globale (site_name, base_url, timezone)
+│   ├── database.php                  # Connexion PostgreSQL (PDO)
+│   └── seo.php                       # Defaults SEO (title, description, og tags)
+│
+├── public/                           # Racine web (document root)
+│   ├── index.php                     # Front controller
+│   ├── .htaccess                     # Rewriting vers index.php
+│   ├── sitemap.xml.php               # Generation dynamique sitemap
+│   ├── robots.txt
+│   ├── favicon.ico
+│   └── assets/
+│       ├── css/
+│       │   ├── style.css
+│       │   └── admin.css
+│       ├── js/
+│       │   ├── main.js
+│       │   └── admin.js
+│       └── images/
+│           └── placeholders/
+│
+├── src/
+│   ├── Core/
+│   │   ├── Router.php                # Routes propres (/article/slug)
+│   │   ├── Controller.php
+│   │   ├── View.php
+│   │   ├── Database.php
+│   │   ├── Auth.php
+│   │   ├── Csrf.php
+│   │   └── Validator.php
+│   │
+│   ├── Controllers/
+│   │   ├── Front/
+│   │   │   ├── HomeController.php
+│   │   │   ├── ArticleController.php
+│   │   │   ├── CategoryController.php
+│   │   │   └── SearchController.php
+│   │   └── Back/
+│   │       ├── DashboardController.php
+│   │       ├── AuthController.php
+│   │       ├── ArticleAdminController.php
+│   │       ├── CategoryAdminController.php
+│   │       └── UserController.php
+│   │
+│   ├── Models/
+│   │   ├── Article.php
+│   │   ├── Category.php
+│   │   ├── User.php
+│   │   └── Image.php
+│   │
+│   ├── Services/
+│   │   ├── SeoService.php            # title/meta canonical/og/twitter
+│   │   ├── SlugService.php
+│   │   ├── ImageService.php
+│   │   └── LighthouseHintsService.php
+│   │
+│   └── Helpers/
+│       ├── url.php
+│       ├── seo.php
+│       └── format.php
+│
+├── templates/
+│   ├── layouts/
+│   │   ├── front.php
+│   │   └── admin.php
+│   ├── front/
+│   │   ├── home.php
+│   │   ├── article-show.php
+│   │   ├── category-show.php
+│   │   ├── search.php
+│   │   └── partials/
+│   │       ├── header.php
+│   │       ├── footer.php
+│   │       └── article-card.php
+│   └── back/
+│       ├── dashboard.php
+│       ├── auth/
+│       │   └── login.php
+│       ├── articles/
+│       │   ├── list.php
+│       │   ├── create.php
+│       │   ├── edit.php
+│       │   └── delete.php
+│       ├── categories/
+│       │   ├── list.php
+│       │   ├── create.php
+│       │   ├── edit.php
+│       │   └── delete.php
+│       └── users/
+│           ├── profile.php
+│           └── logout.php
+│
+├── routes/
+│   ├── web.php                        # Routes FrontOffice
+│   └── admin.php                      # Routes BackOffice
+│
+├── storage/
+│   ├── logs/
+│   │   └── app.log
+│   ├── cache/
+│   └── uploads/
+│       └── articles/                  # Images uploades avec alt text
+│
+├── tests/
+│   ├── Front/
+│   │   └── FrontPagesTest.php
+│   ├── Back/
+│   │   └── AuthTest.php
+│   └── Seo/
+│       └── MetaTagsTest.php
+│
+└── scripts/
+    ├── init-db.sh                     # Initialise la base PostgreSQL
+    ├── run-lighthouse.sh              # Audit perf mobile/desktop
+    └── backup-db.sh

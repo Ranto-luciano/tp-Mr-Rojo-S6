@@ -1,0 +1,31 @@
+services:
+	app:
+		build:
+			context: .
+			dockerfile: Dockerfile
+		container_name: iran-news-app
+		ports:
+			- "8080:80"
+		env_file:
+			- .env
+		volumes:
+			- ./:/var/www/html
+		depends_on:
+			- db
+
+	db:
+		image: postgres:16-alpine
+		container_name: iran-news-db
+		restart: unless-stopped
+		environment:
+			POSTGRES_DB: ${DB_NAME:-iran_news}
+			POSTGRES_USER: ${DB_USER:-postgres}
+			POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+		ports:
+			- "5432:5432"
+		volumes:
+			- pgdata:/var/lib/postgresql/data
+			- ./sql:/docker-entrypoint-initdb.d
+
+volumes:
+	pgdata:
