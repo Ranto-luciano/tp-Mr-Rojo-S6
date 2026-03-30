@@ -7,9 +7,11 @@ function category_all_with_counts(): array
 	$pdo = db();
 	if (!$pdo instanceof PDO) {
 		return [
-			['name' => 'General', 'slug' => 'general', 'article_count' => 2],
-			['name' => 'Geopolitics', 'slug' => 'geopolitics', 'article_count' => 1],
-			['name' => 'Humanitarian', 'slug' => 'humanitarian', 'article_count' => 1],
+			['name' => 'Politique', 'slug' => 'politique', 'article_count' => 2],
+			['name' => 'Diplomatie', 'slug' => 'diplomatie', 'article_count' => 1],
+			['name' => 'Economie', 'slug' => 'economie', 'article_count' => 2],
+			['name' => 'Securite', 'slug' => 'securite', 'article_count' => 1],
+			['name' => 'Societe', 'slug' => 'societe', 'article_count' => 1],
 		];
 	}
 

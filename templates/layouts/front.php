@@ -7,6 +7,7 @@
 	<link rel="stylesheet" href="/assets/css/style.css">
 </head>
 <body>
+	<a class="skip-link" href="#main-content">Aller au contenu</a>
 	<?php require __DIR__ . '/../front/partials/header.php'; ?>
 	<main class="container main-content" id="main-content">
 		<?= $content ?? '' ?>

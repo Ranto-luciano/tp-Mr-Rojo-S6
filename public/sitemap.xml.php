@@ -11,7 +11,7 @@ header('Content-Type: application/xml; charset=utf-8');
 
 $baseUrl = app_base_url();
 
-$staticPaths = ['/', '/search'];
+$staticPaths = ['/', search_url()];
 $categories = category_all_with_counts();
 $articles = article_sitemap_items();
 
@@ -26,13 +26,13 @@ echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 
 	<?php foreach ($categories as $category): ?>
 		<url>
-			<loc><?= htmlspecialchars($baseUrl . '/category/' . $category['slug'], ENT_QUOTES, 'UTF-8') ?></loc>
+			<loc><?= htmlspecialchars($baseUrl . category_url((string) $category['slug']), ENT_QUOTES, 'UTF-8') ?></loc>
 		</url>
 	<?php endforeach; ?>
 
 	<?php foreach ($articles as $article): ?>
 		<url>
-			<loc><?= htmlspecialchars($baseUrl . '/article/' . $article['slug'], ENT_QUOTES, 'UTF-8') ?></loc>
+			<loc><?= htmlspecialchars($baseUrl . article_url((string) $article['slug']), ENT_QUOTES, 'UTF-8') ?></loc>
 			<?php if (!empty($article['updated_at'])): ?>
 				<lastmod><?= htmlspecialchars((new DateTimeImmutable((string) $article['updated_at']))->format('c'), ENT_QUOTES, 'UTF-8') ?></lastmod>
 			<?php endif; ?>

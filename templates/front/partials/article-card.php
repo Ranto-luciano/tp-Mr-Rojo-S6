@@ -16,6 +16,6 @@
 			<a href="<?= e(article_url((string) $article['slug'])) ?>"><?= e($article['title']) ?></a>
 		</h3>
 		<p><?= e(excerpt_text((string) ($article['excerpt'] ?: $article['content']), 140)) ?></p>
-		<p class="meta"><?= e(format_date($article['published_at'] ?? null)) ?></p>
+		<p class="meta"><?= e(format_date($article['published_at'] ?? null)) ?> · Lecture rapide</p>
 	</div>
 </article>
