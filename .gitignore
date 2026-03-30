@@ -6,6 +6,7 @@
 # Dependencies
 vendor/
 docs/resume.txt
+docs/rewriting.txt
 
 # Runtime data
 storage/logs/*.log

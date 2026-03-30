@@ -8,7 +8,7 @@ $path = current_path();
 			<span class="brand-mark" aria-hidden="true"></span>
 			<span>Iran News</span>
 		</a>
-		<form class="search-form" action="/search" method="get" role="search">
+		<form class="search-form" action="<?= e(search_url()) ?>" method="get" role="search">
 			<label for="search-input" class="sr-only">Rechercher un article</label>
 			<input id="search-input" name="q" type="search" placeholder="Rechercher..." value="<?= e($_GET['q'] ?? '') ?>">
 			<button type="submit">Chercher</button>

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Controllers\Back;
 
 use Core\Controller;
@@ -33,4 +35,9 @@ class DashboardController extends Controller
             'user_name' => $_SESSION['user_name']
         ]);
     }
+
+    // public function index(): void
+	// {
+	// 	require __DIR__ . '/../../../templates/back/dashboard.php';
+	// }
 }

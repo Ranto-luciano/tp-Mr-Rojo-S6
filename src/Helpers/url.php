@@ -23,12 +23,17 @@ function url_for(string $path = '/'): string
 
 function article_url(string $slug): string
 {
-	return '/article/' . rawurlencode($slug);
+	return '/actualites/article-' . rawurlencode($slug) . '.html';
 }
 
 function category_url(string $slug): string
 {
-	return '/category/' . rawurlencode($slug);
+	return '/rubriques/' . rawurlencode($slug) . '.html';
+}
+
+function search_url(): string
+{
+	return '/recherche.html';
 }
 
 function current_path(): string

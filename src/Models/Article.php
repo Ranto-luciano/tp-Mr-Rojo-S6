@@ -327,85 +327,86 @@ class Article
 
     function article_fallback_data(): array
     {
-        return [
-            [
-                'id' => 1,
-                'title' => 'Conflict Timeline and Key Events',
-                'slug' => 'conflict-timeline-key-events',
-                'excerpt' => 'A concise timeline of major developments and turning points.',
-                'content' => 'This page summarizes key events in chronological order to help readers understand context and evolution.',
-                'published_at' => date('Y-m-d H:i:s', strtotime('-3 days')),
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-2 days')),
-                'category_name' => 'General',
-                'category_slug' => 'general',
-                'image_path' => '/assets/images/placeholders/og-default.jpg',
-                'image_alt' => 'Timeline illustration for key conflict events',
-            ],
-            [
-                'id' => 2,
-                'title' => 'Regional Impacts and Geopolitical Tensions',
-                'slug' => 'regional-impacts-geopolitical-tensions',
-                'excerpt' => 'How neighboring regions are affected by ongoing instability.',
-                'content' => 'This article reviews diplomatic, security, and economic dimensions in the region.',
-                'published_at' => date('Y-m-d H:i:s', strtotime('-2 days')),
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-1 day')),
-                'category_name' => 'Geopolitics',
-                'category_slug' => 'geopolitics',
-                'image_path' => '/assets/images/placeholders/og-default.jpg',
-                'image_alt' => 'Map indicating geopolitical pressure points',
-            ],
-            [
-                'id' => 3,
-                'title' => 'Humanitarian Situation and Civilian Support',
-                'slug' => 'humanitarian-situation-civilian-support',
-                'excerpt' => 'A structured look at humanitarian concerns and response actions.',
-                'content' => 'The humanitarian situation includes displacement, healthcare strain, and aid logistics.',
-                'published_at' => date('Y-m-d H:i:s', strtotime('-1 day')),
-                'updated_at' => date('Y-m-d H:i:s', strtotime('-12 hours')),
-                'category_name' => 'Humanitarian',
-                'category_slug' => 'humanitarian',
-                'image_path' => '/assets/images/placeholders/og-default.jpg',
-                'image_alt' => 'Aid distribution scene with volunteers and supplies',
-            ],
-        ];
+    	return [
+    		[
+    			'id' => 1,
+    			'title' => 'Iran renforce son dispositif interieur face au risque de contestation',
+    			'slug' => 'iran-renforce-dispositif-interieur-risque-contestation',
+    			'excerpt' => 'Les autorites multiplient les controles et les interpellations dans plusieurs villes.',
+    			'content' => 'Synthese redactionnelle: les mesures de securite interieure se renforcent dans un contexte de forte tension.',
+    			'published_at' => '2026-03-30 09:10:00',
+    			'updated_at' => '2026-03-30 11:00:00',
+    			'category_name' => 'Politique',
+    			'category_slug' => 'politique',
+    			'image_path' => '/assets/images/placeholders/og-default.jpg',
+    			'image_alt' => 'Controle de securite en zone urbaine',
+    		],
+    		[
+    			'id' => 2,
+    			'title' => 'Washington et Teheran: les propositions de paix restent contestees',
+    			'slug' => 'washington-teheran-propositions-paix-contestees',
+    			'excerpt' => 'Les discussions se poursuivent, mais les positions officielles divergent.',
+    			'content' => 'Point diplomatique: les canaux de dialogue restent ouverts, sans compromis public sur les points les plus sensibles.',
+    			'published_at' => '2026-03-30 12:20:00',
+    			'updated_at' => '2026-03-30 12:40:00',
+    			'category_name' => 'Diplomatie',
+    			'category_slug' => 'diplomatie',
+    			'image_path' => '/assets/images/placeholders/og-default.jpg',
+    			'image_alt' => 'Rencontre diplomatique sur la crise regionale',
+    		],
+    		[
+    			'id' => 3,
+    			'title' => 'Le conflit regional pese sur les perspectives economiques internationales',
+    			'slug' => 'conflit-regional-pese-perspectives-economiques-internationales',
+    			'excerpt' => 'Les institutions economiques alertent sur les effets de contagion.',
+    			'content' => 'Analyse economique: inflation importee, commerce perturbe et incertitude durable pour les pays exposes.',
+    			'published_at' => '2026-03-30 13:05:00',
+    			'updated_at' => '2026-03-30 13:20:00',
+    			'category_name' => 'Economie',
+    			'category_slug' => 'economie',
+    			'image_path' => '/assets/images/placeholders/og-default.jpg',
+    			'image_alt' => 'Courbe economique et indicateurs de risque',
+    		],
+    	];
     }
 
     function article_latest(int $limit = 9): array
     {
         $limit = max(1, min($limit, 50));
-        
-        if (!$this->db instanceof PDO) {
+        $pdo = $this->db;
+
+        if (!$pdo instanceof PDO) {
             return array_slice($this->article_fallback_data(), 0, $limit);
         }
 
         $sql = <<<SQL
-            SELECT
-                a.id,
-                a.title,
-                a.slug,
-                a.excerpt,
-                a.content,
-                a.published_at,
-                a.updated_at,
-                c.name AS category_name,
-                c.slug AS category_slug,
-                img.file_path AS image_path,
-                COALESCE(NULLIF(img.alt_text, ''), a.title) AS image_alt
-            FROM articles a
-            INNER JOIN categories c ON c.id = a.category_id
-            LEFT JOIN LATERAL (
-                SELECT ai.file_path, ai.alt_text
-                FROM article_images ai
-                WHERE ai.article_id = a.id
-                ORDER BY ai.sort_order ASC, ai.id ASC
-                LIMIT 1
-            ) img ON TRUE
-            WHERE a.is_published = TRUE
-            ORDER BY a.published_at DESC NULLS LAST, a.id DESC
-            LIMIT :limit
-        SQL;
+		SELECT
+			a.id,
+			a.title,
+			a.slug,
+			a.excerpt,
+			a.content,
+			a.published_at,
+			a.updated_at,
+			c.name AS category_name,
+			c.slug AS category_slug,
+			img.file_path AS image_path,
+			COALESCE(NULLIF(img.alt_text, ''), a.title) AS image_alt
+		FROM articles a
+		INNER JOIN categories c ON c.id = a.category_id
+		LEFT JOIN LATERAL (
+			SELECT ai.file_path, ai.alt_text
+			FROM article_images ai
+			WHERE ai.article_id = a.id
+			ORDER BY ai.sort_order ASC, ai.id ASC
+			LIMIT 1
+		) img ON TRUE
+		WHERE a.is_published = TRUE
+		ORDER BY a.published_at DESC NULLS LAST, a.id DESC
+		LIMIT :limit
+	SQL;
 
-        $stmt = $this->db->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
 
@@ -430,31 +431,30 @@ class Article
         }
 
         $sql = <<<SQL
-            SELECT
-                a.id,
-                a.title,
-                a.slug,
-                a.excerpt,
-                a.content,
-                a.published_at,
-                a.updated_at,
-                c.name AS category_name,
-                c.slug AS category_slug,
-                img.file_path AS image_path,
-                COALESCE(NULLIF(img.alt_text, ''), a.title) AS image_alt
-            FROM articles a
-            INNER JOIN categories c ON c.id = a.category_id
-            LEFT JOIN LATERAL (
-                SELECT ai.file_path, ai.alt_text
-                FROM article_images ai
-                WHERE ai.article_id = a.id
-                ORDER BY ai.sort_order ASC, ai.id ASC
-                LIMIT 1
-            ) img ON TRUE
-            WHERE a.slug = :slug
-            AND a.is_published = TRUE
-            LIMIT 1
-        SQL;
+		SELECT
+			a.id,
+			a.title,
+			a.slug,
+			a.excerpt,
+			a.content,
+			a.published_at,
+			a.updated_at,
+			c.name AS category_name,
+			c.slug AS category_slug,
+			img.file_path AS image_path,
+			COALESCE(NULLIF(img.alt_text, ''), a.title) AS image_alt
+		FROM articles a
+		INNER JOIN categories c ON c.id = a.category_id
+		LEFT JOIN LATERAL (
+			SELECT ai.file_path, ai.alt_text
+			FROM article_images ai
+			WHERE ai.article_id = a.id
+			ORDER BY ai.sort_order ASC, ai.id ASC
+			LIMIT 1
+		) img ON TRUE
+		WHERE a.slug = :slug
+		AND a.is_published = TRUE LIMIT 1
+	SQL;
 
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['slug' => $slug]);
@@ -481,32 +481,31 @@ class Article
         }
 
         $sql = <<<SQL
-            SELECT
-                a.id,
-                a.title,
-                a.slug,
-                a.excerpt,
-                a.content,
-                a.published_at,
-                a.updated_at,
-                c.name AS category_name,
-                c.slug AS category_slug,
-                img.file_path AS image_path,
-                COALESCE(NULLIF(img.alt_text, ''), a.title) AS image_alt
-            FROM articles a
-            INNER JOIN categories c ON c.id = a.category_id
-            LEFT JOIN LATERAL (
-                SELECT ai.file_path, ai.alt_text
-                FROM article_images ai
-                WHERE ai.article_id = a.id
-                ORDER BY ai.sort_order ASC, ai.id ASC
-                LIMIT 1
-            ) img ON TRUE
-            WHERE c.slug = :slug
-            AND a.is_published = TRUE
-            ORDER BY a.published_at DESC NULLS LAST, a.id DESC
-            LIMIT :limit
-        SQL;
+		SELECT
+			a.id,
+			a.title,
+			a.slug,
+			a.excerpt,
+			a.content,
+			a.published_at,
+			a.updated_at,
+			c.name AS category_name,
+			c.slug AS category_slug,
+			img.file_path AS image_path,
+			COALESCE(NULLIF(img.alt_text, ''), a.title) AS image_alt
+		FROM articles a
+		INNER JOIN categories c ON c.id = a.category_id
+		LEFT JOIN LATERAL (
+			SELECT ai.file_path, ai.alt_text
+			FROM article_images ai
+			WHERE ai.article_id = a.id
+			ORDER BY ai.sort_order ASC, ai.id ASC
+			LIMIT 1
+		) img ON TRUE
+		WHERE c.slug = :slug
+		AND a.is_published = TRUE
+		ORDER BY a.published_at DESC NULLS LAST, a.id DESC LIMIT :limit
+	SQL;
 
         $stmt = $this->db->prepare($sql);
         $stmt->bindValue(':slug', $categorySlug);
@@ -525,7 +524,8 @@ class Article
             return [];
         }
 
-        if (!$this->db instanceof PDO) {
+        $pdo = $this->db;
+        if (!$pdo instanceof PDO) {
             $needle = mb_strtolower($query);
             $matches = array_values(array_filter($this->article_fallback_data(), static function (array $article) use ($needle): bool {
                 $haystack = mb_strtolower($article['title'] . ' ' . $article['excerpt'] . ' ' . $article['content']);
@@ -537,37 +537,32 @@ class Article
 
         $sql = <<<SQL
             SELECT
-                a.id,
-                a.title,
-                a.slug,
-                a.excerpt,
-                a.content,
-                a.published_at,
-                a.updated_at,
-                c.name AS category_name,
-                c.slug AS category_slug,
-                img.file_path AS image_path,
-                COALESCE(NULLIF(img.alt_text, ''), a.title) AS image_alt
+            a.id,
+            a.title,
+            a.slug,
+            a.excerpt,
+            a.content,
+            a.published_at,
+            a.updated_at,
+            c.name AS category_name,
+            c.slug AS category_slug,
+            img.file_path AS image_path,
+            COALESCE(NULLIF(img.alt_text, ''), a.title) AS image_alt
             FROM articles a
             INNER JOIN categories c ON c.id = a.category_id
             LEFT JOIN LATERAL (
-                SELECT ai.file_path, ai.alt_text
-                FROM article_images ai
-                WHERE ai.article_id = a.id
-                ORDER BY ai.sort_order ASC, ai.id ASC
-                LIMIT 1
+            SELECT ai.file_path, ai.alt_text
+            FROM article_images ai
+            WHERE ai.article_id = a.id
+            ORDER BY ai.sort_order ASC, ai.id ASC
+            LIMIT 1
             ) img ON TRUE
             WHERE a.is_published = TRUE
-            AND (
-                a.title ILIKE :search
-                OR a.excerpt ILIKE :search
-                OR a.content ILIKE :search
-            )
-            ORDER BY a.published_at DESC NULLS LAST, a.id DESC
-            LIMIT :limit
+            AND ( a.title ILIKE :search OR a.excerpt ILIKE :search OR a.content ILIKE :search )
+            ORDER BY a.published_at DESC NULLS LAST, a.id DESC LIMIT :limit
         SQL;
 
-        $stmt = $this->db->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         $stmt->bindValue(':search', '%' . $query . '%');
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
@@ -595,8 +590,9 @@ class Article
 
     function article_sitemap_items(): array
     {
+        $pdo = $this->db;
 
-        if (!$this->db instanceof PDO) {
+        if (!$pdo instanceof PDO) {
             return array_map(static function (array $article): array {
                 return [
                     'slug' => $article['slug'],
@@ -605,7 +601,7 @@ class Article
             }, $this->article_fallback_data());
         }
 
-        $stmt = $this->db->query(
+        $stmt = $pdo->query(
             'SELECT slug, COALESCE(updated_at, published_at, created_at) AS updated_at FROM articles WHERE is_published = TRUE ORDER BY id DESC'
         );
 

@@ -8,7 +8,7 @@ $seo = seo_merge([
 	'title' => $query === '' ? 'Recherche | Iran News' : 'Recherche: ' . $query . ' | Iran News',
 	'description' => 'Recherche d\'articles sur le conflit en Iran.',
 	'robots' => 'noindex,follow',
-	'canonical' => $query === '' ? url_for('/search') : url_for('/search?q=' . rawurlencode($query)),
+	'canonical' => $query === '' ? url_for(search_url()) : url_for(search_url() . '?q=' . rawurlencode($query)),
 ]);
 
 ob_start();
@@ -19,7 +19,7 @@ ob_start();
 	<p>Recherche par mots-clefs dans le titre, l'extrait et le contenu.</p>
 </section>
 
-<form class="search-panel" action="/search" method="get">
+<form class="search-panel" action="<?= e(search_url()) ?>" method="get">
 	<label for="q">Mot-clef</label>
 	<div class="search-panel-row">
 		<input id="q" name="q" type="search" value="<?= e($query) ?>" required>
