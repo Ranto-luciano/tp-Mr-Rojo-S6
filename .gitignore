@@ -1,0 +1,27 @@
+# Environment
+.env
+.env.*
+!.env.example
+
+# Dependencies
+vendor/
+
+# Runtime data
+storage/logs/*.log
+storage/cache/*
+!storage/cache/.gitkeep
+storage/backups/
+
+# User uploads
+storage/uploads/articles/*
+!storage/uploads/articles/.gitkeep
+
+# Build and reports
+coverage/
+.lighthouseci/
+
+# IDE and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
