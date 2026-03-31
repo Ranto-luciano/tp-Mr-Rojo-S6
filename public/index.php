@@ -2,20 +2,29 @@
 
 declare(strict_types=1);
 
-$appConfig = require __DIR__ . '/../config/app.php';
-date_default_timezone_set($appConfig['timezone']);
+error_reporting(E_ALL);
+ini_set('display_errors', '1');
 
-$path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
-
-if ($path === '/' || $path === '') {
-	require __DIR__ . '/../templates/front/home.php';
-	exit;
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
 }
 
-if ($path === '/admin/login') {
-	require __DIR__ . '/../templates/back/auth/login.php';
-	exit;
-}
+spl_autoload_register(static function (string $class): void {
+    $file = __DIR__ . '/../src/' . str_replace('\\', '/', $class) . '.php';
 
-http_response_code(404);
-echo '404 - Page not found';
+    if (file_exists($file)) {
+        require $file;
+    }
+});
+
+require __DIR__ . '/../src/bootstrap.php';
+
+$router = new Core\Router();
+
+require __DIR__ . '/../routes/web.php';
+require __DIR__ . '/../routes/admin.php';
+
+$url = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/';
+$method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+
+$router->dispatch($url, $method);

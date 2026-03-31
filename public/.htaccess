@@ -1,5 +1,14 @@
 RewriteEngine On
 
+# Home and search pages
+RewriteRule ^$ index.php [QSA,L]
+RewriteRule ^recherche\.html$ index.php?route=search [QSA,L,NC]
+
+# Rewritten news URLs (lesson style)
+RewriteRule ^actualites/article-([a-z0-9-]+)\.html$ index.php?route=article&slug=$1 [QSA,L,NC]
+RewriteRule ^rubriques/([a-z0-9-]+)\.html$ index.php?route=category&slug=$1 [QSA,L,NC]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
-RewriteRule ^ index.php [QSA,L]
+
+RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]

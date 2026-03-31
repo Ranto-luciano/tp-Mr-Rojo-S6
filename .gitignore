@@ -5,16 +5,17 @@
 
 # Dependencies
 vendor/
+docs/resume.txt
+docs/rewriting.txt
 
 # Runtime data
 storage/logs/*.log
 storage/cache/*
 !storage/cache/.gitkeep
 storage/backups/
+public/storage
 
-# User uploads
-storage/uploads/articles/*
-!storage/uploads/articles/.gitkeep
+# User uploads are versioned so demo data works after a fresh clone.
 
 # Build and reports
 coverage/

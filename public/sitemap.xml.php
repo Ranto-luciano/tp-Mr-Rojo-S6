@@ -2,17 +2,44 @@
 
 declare(strict_types=1);
 
+require __DIR__ . '/../src/Core/Database.php';
+require __DIR__ . '/../src/Models/Category.php';
+require __DIR__ . '/../src/Models/Article.php';
+require __DIR__ . '/../src/Helpers/url.php';
+
 header('Content-Type: application/xml; charset=utf-8');
 
-$baseUrl = rtrim(getenv('APP_URL') ?: 'http://localhost:8080', '/');
+$baseUrl = app_base_url();
+
+$categoryModel = new Models\Category();
+$articleModel = new Models\Article();
+
+// Récupération des données
+$staticPaths = ['/', search_url()];
+$categories = $categoryModel->category_all_with_counts();
+$articles = $articleModel->article_sitemap_items();
 
 echo "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
 ?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-	<url>
-		<loc><?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/</loc>
-	</url>
-	<url>
-		<loc><?= htmlspecialchars($baseUrl, ENT_QUOTES, 'UTF-8') ?>/search</loc>
-	</url>
+	<?php foreach ($staticPaths as $path): ?>
+		<url>
+			<loc><?= htmlspecialchars($baseUrl . $path, ENT_QUOTES, 'UTF-8') ?></loc>
+		</url>
+	<?php endforeach; ?>
+
+	<?php foreach ($categories as $category): ?>
+		<url>
+			<loc><?= htmlspecialchars($baseUrl . category_url((string) $category['slug']), ENT_QUOTES, 'UTF-8') ?></loc>
+		</url>
+	<?php endforeach; ?>
+
+	<?php foreach ($articles as $article): ?>
+		<url>
+			<loc><?= htmlspecialchars($baseUrl . article_url((string) $article['slug']), ENT_QUOTES, 'UTF-8') ?></loc>
+			<?php if (!empty($article['updated_at'])): ?>
+				<lastmod><?= htmlspecialchars((new DateTimeImmutable((string) $article['updated_at']))->format('c'), ENT_QUOTES, 'UTF-8') ?></lastmod>
+			<?php endif; ?>
+		</url>
+	<?php endforeach; ?>
 </urlset>
