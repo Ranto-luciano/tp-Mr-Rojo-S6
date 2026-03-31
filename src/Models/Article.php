@@ -16,7 +16,7 @@ class Article
         $this->db = Database::getConnection();
     }
 
-    public function findAll(int $limit = null, int $offset = 0): array
+    public function findAll(?int $limit = null, int $offset = 0): array
     {
         $sql = "
             SELECT 

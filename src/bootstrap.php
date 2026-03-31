@@ -8,6 +8,7 @@ require __DIR__ . '/Helpers/format.php';
 require __DIR__ . '/Helpers/seo.php';
 require __DIR__ . '/Models/Category.php';
 require __DIR__ . '/Models/Article.php';
+require __DIR__ . '/Helpers/content.php';
 
 $appConfig = require __DIR__ . '/../config/app.php';
 date_default_timezone_set($appConfig['timezone']);

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Controllers\Back;
 
 use Core\Controller;
-use Core\Auth;
 use Models\Article;
 use Models\Category;
 use Models\User;
@@ -35,9 +34,4 @@ class DashboardController extends Controller
             'user_name' => $_SESSION['user_name']
         ]);
     }
-
-    // public function index(): void
-	// {
-	// 	require __DIR__ . '/../../../templates/back/dashboard.php';
-	// }
 }

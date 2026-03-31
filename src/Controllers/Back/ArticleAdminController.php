@@ -231,44 +231,5 @@ class ArticleAdminController extends Controller
         return !empty($_SERVER['HTTP_X_REQUESTED_WITH']) && 
                strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest';
     }
-
-	// public function index(): void
-	// {
-	// 	require __DIR__ . '/../../../templates/back/articles/list.php';
-	// }
-
-	// public function create(): void
-	// {
-	// 	require __DIR__ . '/../../../templates/back/articles/create.php';
-	// }
-
-	// public function store(): void
-	// {
-	// 	header('Location: /admin/articles');
-	// 	exit;
-	// }
-
-	// public function edit(string $id): void
-	// {
-	// 	require __DIR__ . '/../../../templates/back/articles/edit.php';
-	// }
-
-	// public function update(string $id): void
-	// {
-	// 	header('Location: /admin/articles');
-	// 	exit;
-	// }
-
-	// public function delete(string $id): void
-	// {
-	// 	header('Location: /admin/articles');
-	// 	exit;
-	// }
-
-	// public function togglePublish(string $id): void
-	// {
-	// 	header('Location: /admin/articles');
-	// 	exit;
-	// }
 }
 
