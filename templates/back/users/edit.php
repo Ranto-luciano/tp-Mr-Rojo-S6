@@ -55,28 +55,8 @@
         </div>
     </div>
     
-    <div class="col-md-6">
-        <div class="card mb-3">
-            <div class="card-header bg-white">
-                <h5 class="mb-0">Statistiques</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-2">
-                    <strong>Articles publiés :</strong>
-                    <span class="float-end"><?= $user['articles_count'] ?? 0 ?></span>
-                </div>
-                <div class="mb-2">
-                    <strong>Membre depuis :</strong>
-                    <span class="float-end"><?= date('d/m/Y', strtotime($user['created_at'])) ?></span>
-                </div>
-                <div class="mb-2">
-                    <strong>Dernière modification :</strong>
-                    <span class="float-end"><?= date('d/m/Y H:i', strtotime($user['updated_at'])) ?></span>
-                </div>
-            </div>
-        </div>
         
-        <?php if ($user['articles_count'] > 0): ?>
+        <!-- <?php if ($user['articles_count'] > 0): ?>
         <div class="card">
             <div class="card-header bg-white">
                 <h5 class="mb-0">Derniers articles de cet utilisateur</h5>
@@ -96,6 +76,6 @@
                 </ul>
             </div>
         </div>
-        <?php endif; ?>
+        <?php endif; ?> -->
     </div>
 </div>
