@@ -112,9 +112,16 @@ class ArticleAdminController extends Controller
         $articleId = $this->articleModel->create($data, $_SESSION['user_id']);
         
         if (!empty($_FILES['featured_image']['name'])) {
-            $this->uploadImage($articleId, $_FILES['featured_image'], $_POST['featured_image_alt'] ?? null);
+            $this->uploadImage($articleId, $_FILES['featured_image'], $_POST['featured_image_alt'] ?? null, 0);
         } elseif (!empty($_FILES['image']['name'])) {
-            $this->uploadImage($articleId, $_FILES['image'], $_POST['image_alt'] ?? null);
+            $this->uploadImage($articleId, $_FILES['image'], $_POST['image_alt'] ?? null, 0);
+        }
+
+        $galleryFiles = $this->normalizeUploadedFiles($_FILES['images'] ?? null);
+        if ($galleryFiles !== []) {
+            $galleryAlts = $_POST['image_alts'] ?? [];
+            $startOrder = $this->articleModel->getMaxImageSortOrder($articleId) + 1;
+            $this->uploadGalleryImages($articleId, $galleryFiles, $galleryAlts, $startOrder);
         }
         
         $_SESSION['success'] = 'Article créé avec succès';
@@ -170,11 +177,37 @@ class ArticleAdminController extends Controller
         ];
         
         $this->articleModel->update($id, $data);
+
+        if (!empty($_POST['delete_featured'])) {
+            $this->deleteFeaturedImage($id);
+        }
+
+        $deleteIds = $_POST['delete_images'] ?? [];
+        if (is_array($deleteIds)) {
+            foreach ($deleteIds as $imageId) {
+                $this->deleteImageById($id, (int) $imageId);
+            }
+        }
+
+        $imageAlts = $_POST['image_alts'] ?? [];
+        if (is_array($imageAlts)) {
+            foreach ($imageAlts as $imageId => $altText) {
+                $this->updateImageAlt($id, (int) $imageId, (string) $altText);
+            }
+        }
         
         if (!empty($_FILES['featured_image']['name'])) {
-            $this->uploadImage($id, $_FILES['featured_image'], $_POST['featured_image_alt'] ?? null);
+            $this->deleteFeaturedImage($id);
+            $this->uploadImage($id, $_FILES['featured_image'], $_POST['featured_image_alt'] ?? null, 0);
         } elseif (!empty($_FILES['image']['name'])) {
-            $this->uploadImage($id, $_FILES['image'], $_POST['image_alt'] ?? null);
+            $this->uploadImage($id, $_FILES['image'], $_POST['image_alt'] ?? null, 0);
+        }
+
+        $newImages = $this->normalizeUploadedFiles($_FILES['new_images'] ?? null);
+        if ($newImages !== []) {
+            $newAlts = $_POST['new_image_alts'] ?? [];
+            $startOrder = $this->articleModel->getMaxImageSortOrder($id) + 1;
+            $this->uploadGalleryImages($id, $newImages, $newAlts, $startOrder);
         }
         
         $_SESSION['success'] = 'Article mis à jour avec succès';
@@ -244,7 +277,7 @@ class ArticleAdminController extends Controller
         return $errors;
     }
     
-    private function uploadImage(int $articleId, array $file, ?string $altText = null): void
+    private function uploadImage(int $articleId, array $file, ?string $altText = null, int $sortOrder = 0): void
     {
         $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
         $maxSize = 5 * 1024 * 1024; 
@@ -271,12 +304,89 @@ class ArticleAdminController extends Controller
         if (move_uploaded_file($file['tmp_name'], $filePath)) {
             $relativePath = 'articles/' . $articleId . '/' . $filename;
             $altText = $altText ?: pathinfo($file['name'], PATHINFO_FILENAME);
-            
-            $this->articleModel->addImage($articleId, $relativePath, $altText);
+			
+            $this->articleModel->addImage($articleId, $relativePath, $altText, $sortOrder);
             $_SESSION['success'] = 'Image ajoutée avec succès';
         } else {
             $_SESSION['error'] = 'Erreur lors de l\'upload de l\'image';
         }
+    }
+
+    private function normalizeUploadedFiles(?array $files): array
+    {
+        if (!$files || !is_array($files) || !isset($files['name']) || !is_array($files['name'])) {
+            return [];
+        }
+
+        $normalized = [];
+        foreach ($files['name'] as $index => $name) {
+            if ($name === '' || !isset($files['tmp_name'][$index])) {
+                continue;
+            }
+            $normalized[] = [
+                'name' => $name,
+                'type' => $files['type'][$index] ?? '',
+                'tmp_name' => $files['tmp_name'][$index] ?? '',
+                'error' => $files['error'][$index] ?? UPLOAD_ERR_NO_FILE,
+                'size' => $files['size'][$index] ?? 0,
+            ];
+        }
+
+        return $normalized;
+    }
+
+    private function uploadGalleryImages(int $articleId, array $files, array $alts, int $startOrder): void
+    {
+        $sortOrder = $startOrder;
+        foreach ($files as $index => $file) {
+            if (!empty($file['error'])) {
+                continue;
+            }
+            $altText = $alts[$index] ?? null;
+            $this->uploadImage($articleId, $file, $altText, $sortOrder);
+            $sortOrder++;
+        }
+    }
+
+    private function deleteFeaturedImage(int $articleId): void
+    {
+        $images = $this->articleModel->getImages($articleId);
+        if ($images === []) {
+            return;
+        }
+
+        $featured = $images[0];
+        $this->deleteImageById($articleId, (int) $featured['id']);
+    }
+
+    private function deleteImageById(int $articleId, int $imageId): void
+    {
+        $image = $this->articleModel->getImageById($imageId);
+        if (!$image || (int) $image['article_id'] !== $articleId) {
+            return;
+        }
+
+        $filePath = __DIR__ . '/../../../storage/uploads/' . $image['file_path'];
+        if (is_file($filePath)) {
+            unlink($filePath);
+        }
+
+        $this->articleModel->deleteImageById($imageId);
+    }
+
+    private function updateImageAlt(int $articleId, int $imageId, string $altText): void
+    {
+        $image = $this->articleModel->getImageById($imageId);
+        if (!$image || (int) $image['article_id'] !== $articleId) {
+            return;
+        }
+
+        $cleanAlt = trim($altText);
+        if ($cleanAlt === '') {
+            return;
+        }
+
+        $this->articleModel->updateImageAlt($imageId, $cleanAlt);
     }
     
     private function isAjax(): bool

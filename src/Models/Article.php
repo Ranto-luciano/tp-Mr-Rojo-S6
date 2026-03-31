@@ -76,8 +76,35 @@ class Article
         ");
 
         $stmt->execute(['article_id' => $articleId]);
-        $rows = $stmt->fetchAll() ?: [];
-        return $this->normalizeImageList($rows);
+        return $stmt->fetchAll();
+    }
+
+    public function getImageById(int $imageId): ?array
+    {
+        $stmt = $this->db->prepare("SELECT * FROM article_images WHERE id = :id");
+        $stmt->execute(['id' => $imageId]);
+        $row = $stmt->fetch();
+
+        return is_array($row) ? $row : null;
+    }
+
+    public function updateImageAlt(int $imageId, string $altText): bool
+    {
+        $stmt = $this->db->prepare("UPDATE article_images SET alt_text = :alt_text WHERE id = :id");
+        return $stmt->execute(['alt_text' => $altText, 'id' => $imageId]);
+    }
+
+    public function deleteImageById(int $imageId): bool
+    {
+        $stmt = $this->db->prepare("DELETE FROM article_images WHERE id = :id");
+        return $stmt->execute(['id' => $imageId]);
+    }
+
+    public function getMaxImageSortOrder(int $articleId): int
+    {
+        $stmt = $this->db->prepare("SELECT COALESCE(MAX(sort_order), -1) FROM article_images WHERE article_id = :article_id");
+        $stmt->execute(['article_id' => $articleId]);
+        return (int) $stmt->fetchColumn();
     }
 
     public function article_images_by_slug(string $slug): array
