@@ -7,7 +7,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Créer une catégorie</h1>
     <a href="/admin/categories" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Retour à la liste
+        Retour à la liste
     </a>
 </div>
 
@@ -37,7 +37,7 @@
                             <input type="text" class="form-control <?= isset($errors['slug']) ? 'is-invalid' : '' ?>" 
                                    id="slug" name="slug" value="<?= htmlspecialchars($old['slug'] ?? '') ?>">
                             <button class="btn btn-outline-secondary" type="button" onclick="generateSlug()">
-                                <i class="fas fa-sync"></i> Générer
+                                Generer
                             </button>
                         </div>
                         <small class="text-muted">Laissez vide pour génération automatique. Utilisez uniquement des lettres minuscules, chiffres et tirets.</small>
@@ -47,7 +47,6 @@
                     </div>
                     
                     <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i>
                         <strong>Aperçu :</strong>
                         <div class="mt-2">
                             <div>URL : <code id="url_preview"><?= $_SERVER['HTTP_HOST'] ?>/category/</code></div>
@@ -59,10 +58,10 @@
                     
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Créer la catégorie
+                            Creer la categorie
                         </button>
                         <a href="/admin/categories" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Annuler
+                            Annuler
                         </a>
                     </div>
                 </form>
@@ -92,7 +91,6 @@
                 </ul>
                 
                 <div class="alert alert-warning small">
-                    <i class="fas fa-exclamation-triangle"></i>
                     <strong>Attention :</strong> La suppression d'une catégorie n'est possible que si elle ne contient aucun article.
                 </div>
             </div>

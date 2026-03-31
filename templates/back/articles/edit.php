@@ -8,7 +8,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Modifier l'article</h1>
     <a href="/admin/articles" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Retour à la liste
+        Retour à la liste
     </a>
 </div>
 
@@ -37,7 +37,7 @@
                             <input type="text" class="form-control <?= isset($errors['slug']) ? 'is-invalid' : '' ?>" 
                                    id="slug" name="slug" value="<?= htmlspecialchars($article['slug']) ?>">
                             <button class="btn btn-outline-secondary" type="button" onclick="generateSlugFromTitle()">
-                                <i class="fas fa-sync"></i> Générer
+                                Générer
                             </button>
                         </div>
                         <?php if (isset($errors['slug'])): ?>
@@ -115,7 +115,7 @@
                 <div class="card-body">
                     <div id="image-gallery" class="row g-3"></div>
                     <button type="button" class="btn btn-outline-primary" onclick="addImageField()">
-                        <i class="fas fa-plus"></i> Ajouter une image
+                        Ajouter une image
                     </button>
                 </div>
             </div>
@@ -138,18 +138,18 @@
                     
                     <?php if ($article['published_at']): ?>
                     <div class="alert alert-info small">
-                        <i class="fas fa-calendar-alt"></i> Publié le : <?= date('d/m/Y H:i', strtotime($article['published_at'])) ?>
+                        Publié le : <?= date('d/m/Y H:i', strtotime($article['published_at'])) ?>
                     </div>
                     <?php endif; ?>
                     
                     <div class="alert alert-secondary small">
-                        <i class="fas fa-user"></i> Créé par : <?= htmlspecialchars($article['author_name']) ?>
+                        Créé par : <?= htmlspecialchars($article['author_name']) ?>
                         <br>
-                        <i class="fas fa-clock"></i> Dernière modification : <?= date('d/m/Y H:i', strtotime($article['updated_at'])) ?>
+                        Dernière modification : <?= date('d/m/Y H:i', strtotime($article['updated_at'])) ?>
                     </div>
                     
                     <button type="submit" class="btn btn-primary w-100 mb-2">
-                        <i class="fas fa-save"></i> Mettre à jour
+                        Mettre à jour
                     </button>
                 </div>
             </div>
@@ -294,7 +294,7 @@ function addImageField() {
                 <input type="text" class="form-control mb-2" name="new_image_alts[]" placeholder="Texte alternatif (alt)">
                 <div id="preview_${imageCount}" class="text-center mb-2"></div>
                 <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.image-field').remove()">
-                    <i class="fas fa-trash"></i> Supprimer
+                    Supprimer
                 </button>
             </div>
         </div>

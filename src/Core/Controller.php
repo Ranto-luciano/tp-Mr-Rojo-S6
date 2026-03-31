@@ -6,6 +6,16 @@ abstract class Controller
 {
     protected function render(string $view, array $data = []): void
     {
+        if (!isset($data['errors']) && isset($_SESSION['errors']) && is_array($_SESSION['errors'])) {
+            $data['errors'] = $_SESSION['errors'];
+            unset($_SESSION['errors']);
+        }
+
+        if (!isset($data['old']) && isset($_SESSION['old']) && is_array($_SESSION['old'])) {
+            $data['old'] = $_SESSION['old'];
+            unset($_SESSION['old']);
+        }
+
         extract($data);
         
         $viewFile = __DIR__ . "/../../templates/back/{$view}.php";

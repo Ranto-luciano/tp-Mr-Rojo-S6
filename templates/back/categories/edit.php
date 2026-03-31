@@ -7,7 +7,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Modifier la catégorie</h1>
     <a href="/admin/categories" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Retour à la liste
+        Retour à la liste
     </a>
 </div>
 
@@ -35,7 +35,7 @@
                             <input type="text" class="form-control <?= isset($errors['slug']) ? 'is-invalid' : '' ?>" 
                                    id="slug" name="slug" value="<?= htmlspecialchars($category['slug']) ?>">
                             <button class="btn btn-outline-secondary" type="button" onclick="generateSlug()">
-                                <i class="fas fa-sync"></i> Générer
+                                Generer
                             </button>
                         </div>
                         <small class="text-muted">Modifiez le slug avec précaution - cela changera l'URL de toutes les catégories.</small>
@@ -45,7 +45,6 @@
                     </div>
                     
                     <div class="alert alert-info">
-                        <i class="fas fa-info-circle"></i>
                         <strong>Aperçu :</strong>
                         <div class="mt-2">
                             <div>URL : <code id="url_preview"><?= $_SERVER['HTTP_HOST'] ?>/category/<?= $category['slug'] ?></code></div>
@@ -57,10 +56,10 @@
                     
                     <div class="d-flex gap-2">
                         <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-save"></i> Mettre à jour
+                            Mettre a jour
                         </button>
                         <a href="/admin/categories" class="btn btn-secondary">
-                            <i class="fas fa-times"></i> Annuler
+                            Annuler
                         </a>
                     </div>
                 </form>
@@ -117,7 +116,6 @@
         
         <!-- Avertissement sur les slugs -->
         <div class="alert alert-warning mt-3">
-            <i class="fas fa-exclamation-triangle"></i>
             <strong>Attention :</strong> La modification du slug changera l'URL de cette catégorie. 
             Les anciens liens continueront de fonctionner si vous avez configuré des redirections.
         </div>

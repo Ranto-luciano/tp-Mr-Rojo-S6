@@ -19,7 +19,6 @@
             <div class="col-md-6 text-center">
                 <div class="card">
                     <div class="card-body">
-                        <i class="fas fa-sign-out-alt fa-3x text-primary mb-3"></i>
                         <h4>Déconnexion en cours...</h4>
                         <p>Vous allez être redirigé vers la page de connexion.</p>
                         <a href="/admin/login" class="btn btn-primary">Cliquez ici si la redirection ne fonctionne pas</a>

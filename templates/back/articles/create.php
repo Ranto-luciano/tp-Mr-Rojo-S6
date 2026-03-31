@@ -8,7 +8,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Créer un article</h1>
     <a href="/admin/articles" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Retour à la liste
+        Retour à la liste
     </a>
 </div>
 
@@ -38,7 +38,7 @@
                             <input type="text" class="form-control <?= isset($errors['slug']) ? 'is-invalid' : '' ?>" 
                                    id="slug" name="slug" value="<?= htmlspecialchars($old['slug'] ?? '') ?>">
                             <button class="btn btn-outline-secondary" type="button" onclick="generateSlugFromTitle()">
-                                <i class="fas fa-sync"></i> Générer
+                                Générer
                             </button>
                         </div>
                         <small class="text-muted">Laissez vide pour génération automatique. Utilisez uniquement des lettres minuscules, chiffres et tirets.</small>
@@ -94,7 +94,7 @@
                         <!-- Les images seront ajoutées dynamiquement -->
                     </div>
                     <button type="button" class="btn btn-outline-primary" onclick="addImageField()">
-                        <i class="fas fa-plus"></i> Ajouter une image
+                        Ajouter une image
                     </button>
                     <small class="text-muted d-block mt-2">Formats acceptés : JPG, PNG, WebP (max 5MB par image)</small>
                 </div>
@@ -116,10 +116,10 @@
                     </div>
                     
                     <button type="submit" class="btn btn-primary w-100 mb-2">
-                        <i class="fas fa-save"></i> Enregistrer l'article
+                        Enregistrer l'article
                     </button>
                     <button type="button" class="btn btn-outline-secondary w-100" onclick="saveAsDraft()">
-                        <i class="fas fa-pencil-alt"></i> Sauvegarder comme brouillon
+                        Sauvegarder comme brouillon
                     </button>
                 </div>
             </div>
@@ -146,7 +146,6 @@
                     </div>
                     
                     <div class="alert alert-info small">
-                        <i class="fas fa-info-circle"></i>
                         <strong>Aperçu dans les moteurs de recherche :</strong>
                         <div id="meta_preview" class="mt-2">
                             <div class="fw-bold text-primary"><?= htmlspecialchars($old['meta_title'] ?? '') ?: 'Titre de l\'article' ?></div>
@@ -273,7 +272,7 @@ function addImageField() {
                 <input type="text" class="form-control mb-2" name="image_alts[]" placeholder="Texte alternatif (alt)">
                 <div id="preview_${imageCount}" class="text-center mb-2"></div>
                 <button type="button" class="btn btn-sm btn-danger" onclick="this.closest('.image-field').remove()">
-                    <i class="fas fa-trash"></i> Supprimer
+                    Supprimer
                 </button>
             </div>
         </div>

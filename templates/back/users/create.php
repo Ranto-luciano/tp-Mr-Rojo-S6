@@ -7,7 +7,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Créer un utilisateur</h1>
     <a href="/admin/users" class="btn btn-secondary">
-        <i class="fas fa-arrow-left"></i> Retour
+        Retour
     </a>
 </div>
 
@@ -59,7 +59,7 @@
                     <hr>
                     
                     <button type="submit" class="btn btn-primary">
-                        <i class="fas fa-save"></i> Créer l'utilisateur
+                        Créer l'utilisateur
                     </button>
                 </form>
             </div>

@@ -197,6 +197,36 @@ class Article
         return $stmt->fetch()['id'];
     }
 
+    private function toPublicImagePath(?string $path): ?string
+    {
+        if ($path === null) {
+            return null;
+        }
+
+        $normalized = trim($path);
+        if ($normalized === '') {
+            return null;
+        }
+
+        if (str_starts_with($normalized, '/')) {
+            return $normalized;
+        }
+
+        return '/storage/uploads/' . ltrim($normalized, '/');
+    }
+
+    private function normalizeImagePaths(array $articles): array
+    {
+        foreach ($articles as &$article) {
+            if (array_key_exists('image_path', $article)) {
+                $article['image_path'] = $this->toPublicImagePath($article['image_path']);
+            }
+        }
+        unset($article);
+
+        return $articles;
+    }
+
     private function generateSlug(string $title): string
     {
         $slug = strtolower($title);
@@ -410,7 +440,8 @@ class Article
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
 
-        return $stmt->fetchAll() ?: [];
+        $rows = $stmt->fetchAll() ?: [];
+        return $this->normalizeImagePaths($rows);
     }
 
     function article_find_by_slug(string $slug): ?array
@@ -459,8 +490,12 @@ class Article
         $stmt = $this->db->prepare($sql);
         $stmt->execute(['slug' => $slug]);
         $result = $stmt->fetch();
+        if (!is_array($result)) {
+            return null;
+        }
 
-        return is_array($result) ? $result : null;
+        $result['image_path'] = $this->toPublicImagePath($result['image_path'] ?? null);
+        return $result;
     }
 
     function article_by_category_slug(string $categorySlug, int $limit = 20): array
@@ -512,7 +547,8 @@ class Article
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
 
-        return $stmt->fetchAll() ?: [];
+        $rows = $stmt->fetchAll() ?: [];
+        return $this->normalizeImagePaths($rows);
     }
 
     function article_search(string $query, int $limit = 20): array
@@ -567,7 +603,8 @@ class Article
         $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
         $stmt->execute();
 
-        return $stmt->fetchAll() ?: [];
+        $rows = $stmt->fetchAll() ?: [];
+        return $this->normalizeImagePaths($rows);
     }
 
     function article_related(string $categorySlug, string $excludeSlug, int $limit = 3): array

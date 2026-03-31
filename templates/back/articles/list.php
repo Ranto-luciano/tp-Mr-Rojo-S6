@@ -8,7 +8,7 @@
 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
     <h1 class="h2">Gestion des articles</h1>
     <a href="/admin/articles/create" class="btn btn-primary">
-        <i class="fas fa-plus"></i> Nouvel article
+        Nouvel article
     </a>
 </div>
 
@@ -39,7 +39,7 @@
             </div>
             <div class="col-md-2">
                 <button type="submit" class="btn btn-secondary w-100">
-                    <i class="fas fa-search"></i> Filtrer
+                    Filtrer
                 </button>
             </div>
         </form>
@@ -50,7 +50,6 @@
     <table class="table table-striped table-hover">
         <thead>
             <tr>
-                <th width="50">ID</th>
                 <th>Image</th>
                 <th>Titre</th>
                 <th>Catégorie</th>
@@ -64,14 +63,13 @@
         <tbody>
             <?php if (empty($articles)): ?>
                 <tr>
-                    <td colspan="9" class="text-center text-muted py-4">
+                    <td colspan="8" class="text-center text-muted py-4">
                         Aucun article trouvé
                     </td>
                 </tr>
             <?php else: ?>
                 <?php foreach ($articles as $article): ?>
                 <tr>
-                    <td><?= $article['id'] ?></td>
                     <td>
                         <?php 
                         $firstImage = $article['images'][0] ?? null;
@@ -83,7 +81,7 @@
                         <?php else: ?>
                             <div class="bg-secondary text-white text-center" 
                                  style="width: 50px; height: 50px; line-height: 50px; border-radius: 4px;">
-                                <i class="fas fa-image"></i>
+                                IMG
                             </div>
                         <?php endif; ?>
                     </td>
@@ -101,7 +99,7 @@
                     <td>
                         <?php if ($article['is_published']): ?>
                             <span class="badge bg-success">
-                                <i class="fas fa-check-circle"></i> Publié
+                                Publié
                             </span>
                             <br>
                             <small class="text-muted">
@@ -109,7 +107,7 @@
                             </small>
                         <?php else: ?>
                             <span class="badge bg-warning text-dark">
-                                <i class="fas fa-pencil-alt"></i> Brouillon
+                                Brouillon
                             </span>
                         <?php endif; ?>
                     </td>
@@ -121,54 +119,36 @@
                             modifié: <?= date('d/m/Y', strtotime($article['updated_at'])) ?>
                         </small>
                     </td>
-                    <td class="text-nowrap">
-                        <div class="btn-group" role="group">
+                    <td class="text-nowrap actions-cell">
+                        <div class="actions-group" role="group" aria-label="Actions article">
                             <?php if ($article['is_published']): ?>
-                                <a href="/article/<?= $article['slug'] ?>" target="_blank" 
-                                   class="btn btn-sm btn-info" title="Voir sur le site">
-                                    <i class="fas fa-eye"></i>
+                                <a href="/actualites/article-<?= rawurlencode((string)$article['slug']) ?>.html" target="_blank" 
+                                   class="icon-action view" title="Voir sur le site" aria-label="Voir">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path><circle cx="12" cy="12" r="3"></circle></svg>
                                 </a>
                             <?php endif; ?>
                             
                             <a href="/admin/articles/<?= $article['id'] ?>/edit" 
-                               class="btn btn-sm btn-warning" title="Modifier">
-                                <i class="fas fa-edit"></i>
+                               class="icon-action edit" title="Modifier" aria-label="Modifier">
+                                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4.5-1 9-9-3.5-3.5-9 9L4 20z"></path><path d="M13.5 6.5L17 10"></path></svg>
                             </a>
                             
-                            <button type="button" class="btn btn-sm btn-<?= $article['is_published'] ? 'secondary' : 'success' ?>" 
+                            <button type="button" class="icon-action <?= $article['is_published'] ? 'unpublish' : 'publish' ?>" 
                                     onclick="togglePublish(<?= $article['id'] ?>, <?= $article['is_published'] ? 'false' : 'true' ?>)"
-                                    title="<?= $article['is_published'] ? 'Dépublier' : 'Publier' ?>">
-                                <i class="fas fa-<?= $article['is_published'] ? 'eye-slash' : 'check' ?>"></i>
+                                    title="<?= $article['is_published'] ? 'Depublier' : 'Publier' ?>"
+                                    aria-label="<?= $article['is_published'] ? 'Depublier' : 'Publier' ?>">
+                                <?php if ($article['is_published']): ?>
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3l18 18"></path><path d="M10.6 10.6A3 3 0 0 0 12 15a3 3 0 0 0 2.4-4.4"></path><path d="M6.7 6.7A18 18 0 0 0 2 12s3.5 6 10 6a10.8 10.8 0 0 0 5.3-1.3"></path><path d="M9.9 4.3A11.4 11.4 0 0 1 12 4c6.5 0 10 8 10 8a18 18 0 0 1-3 3.9"></path></svg>
+                                <?php else: ?>
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                                <?php endif; ?>
                             </button>
                             
-                            <button type="button" class="btn btn-sm btn-danger" 
-                                    data-bs-toggle="modal" data-bs-target="#deleteModal<?= $article['id'] ?>"
-                                    title="Supprimer">
-                                <i class="fas fa-trash"></i>
-                            </button>
-                        </div>
-                        
-                        <!-- Modal de confirmation de suppression -->
-                        <div class="modal fade" id="deleteModal<?= $article['id'] ?>" tabindex="-1">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header bg-danger text-white">
-                                        <h5 class="modal-title">Confirmer la suppression</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p>Êtes-vous sûr de vouloir supprimer l'article :</p>
-                                        <p class="fw-bold">"<?= htmlspecialchars($article['title']) ?>" ?</p>
-                                        <p class="text-danger">Cette action est irréversible !</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
-                                        <form method="POST" action="/admin/articles/<?= $article['id'] ?>/delete">
-                                            <button type="submit" class="btn btn-danger">Supprimer définitivement</button>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
+                            <form method="POST" action="/admin/articles/<?= $article['id'] ?>/delete" style="display:inline" onsubmit="return confirm('Supprimer cet article ?');">
+                                <button type="submit" class="icon-action delete" title="Supprimer" aria-label="Supprimer">
+                                    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16"></path><path d="M9 7V4h6v3"></path><path d="M7 7l1 13h8l1-13"></path></svg>
+                                </button>
+                            </form>
                         </div>
                     </td>
                 </tr>
@@ -184,7 +164,7 @@
     <ul class="pagination justify-content-center">
         <li class="page-item <?= $currentPage <= 1 ? 'disabled' : '' ?>">
             <a class="page-link" href="?page=<?= $currentPage - 1 ?>&search=<?= urlencode($_GET['search'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>&category=<?= urlencode($_GET['category'] ?? '') ?>">
-                <i class="fas fa-chevron-left"></i>
+                Precedent
             </a>
         </li>
         
@@ -198,7 +178,7 @@
         
         <li class="page-item <?= $currentPage >= $totalPages ? 'disabled' : '' ?>">
             <a class="page-link" href="?page=<?= $currentPage + 1 ?>&search=<?= urlencode($_GET['search'] ?? '') ?>&status=<?= urlencode($_GET['status'] ?? '') ?>&category=<?= urlencode($_GET['category'] ?? '') ?>">
-                <i class="fas fa-chevron-right"></i>
+                Suivant
             </a>
         </li>
     </ul>

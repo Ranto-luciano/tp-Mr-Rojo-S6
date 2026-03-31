@@ -23,9 +23,58 @@ class ArticleAdminController extends Controller
     public function index(): void
     {
         $articles = $this->articleModel->findAll();
+        $categories = $this->categoryModel->findAll();
+
+        $search = trim((string)($_GET['search'] ?? ''));
+        $status = (string)($_GET['status'] ?? '');
+        $categoryFilter = (int)($_GET['category'] ?? 0);
+        $currentPage = max(1, (int)($_GET['page'] ?? 1));
+        $perPage = 10;
+
+        $filtered = array_values(array_filter($articles, static function (array $article) use ($search, $status, $categoryFilter): bool {
+            if ($search !== '') {
+                $haystack = mb_strtolower((string)(
+                    ($article['title'] ?? '') . ' ' .
+                    ($article['excerpt'] ?? '') . ' ' .
+                    ($article['content'] ?? '')
+                ));
+                if (!str_contains($haystack, mb_strtolower($search))) {
+                    return false;
+                }
+            }
+
+            if ($status === 'published' && empty($article['is_published'])) {
+                return false;
+            }
+
+            if ($status === 'draft' && !empty($article['is_published'])) {
+                return false;
+            }
+
+            if ($categoryFilter > 0 && (int)($article['category_id'] ?? 0) !== $categoryFilter) {
+                return false;
+            }
+
+            return true;
+        }));
+
+        $totalItems = count($filtered);
+        $totalPages = max(1, (int)ceil($totalItems / $perPage));
+        $currentPage = min($currentPage, $totalPages);
+        $offset = ($currentPage - 1) * $perPage;
+        $pageItems = array_slice($filtered, $offset, $perPage);
+
+        foreach ($pageItems as &$article) {
+            $article['images'] = $this->articleModel->getImages((int)$article['id']);
+            $article['views_count'] = $article['views'] ?? 0;
+        }
+        unset($article);
         
         $this->render('articles/list', [
-            'articles' => $articles
+            'articles' => $pageItems,
+            'categories' => $categories,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages,
         ]);
     }
     
@@ -62,8 +111,10 @@ class ArticleAdminController extends Controller
         
         $articleId = $this->articleModel->create($data, $_SESSION['user_id']);
         
-        if (!empty($_FILES['image']['name'])) {
-            $this->uploadImage($articleId, $_FILES['image']);
+        if (!empty($_FILES['featured_image']['name'])) {
+            $this->uploadImage($articleId, $_FILES['featured_image'], $_POST['featured_image_alt'] ?? null);
+        } elseif (!empty($_FILES['image']['name'])) {
+            $this->uploadImage($articleId, $_FILES['image'], $_POST['image_alt'] ?? null);
         }
         
         $_SESSION['success'] = 'Article créé avec succès';
@@ -120,8 +171,10 @@ class ArticleAdminController extends Controller
         
         $this->articleModel->update($id, $data);
         
-        if (!empty($_FILES['image']['name'])) {
-            $this->uploadImage($id, $_FILES['image']);
+        if (!empty($_FILES['featured_image']['name'])) {
+            $this->uploadImage($id, $_FILES['featured_image'], $_POST['featured_image_alt'] ?? null);
+        } elseif (!empty($_FILES['image']['name'])) {
+            $this->uploadImage($id, $_FILES['image'], $_POST['image_alt'] ?? null);
         }
         
         $_SESSION['success'] = 'Article mis à jour avec succès';
@@ -191,7 +244,7 @@ class ArticleAdminController extends Controller
         return $errors;
     }
     
-    private function uploadImage(int $articleId, array $file): void
+    private function uploadImage(int $articleId, array $file, ?string $altText = null): void
     {
         $allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
         $maxSize = 5 * 1024 * 1024; 
@@ -217,7 +270,7 @@ class ArticleAdminController extends Controller
         
         if (move_uploaded_file($file['tmp_name'], $filePath)) {
             $relativePath = 'articles/' . $articleId . '/' . $filename;
-            $altText = $_POST['image_alt'] ?? pathinfo($file['name'], PATHINFO_FILENAME);
+            $altText = $altText ?: pathinfo($file['name'], PATHINFO_FILENAME);
             
             $this->articleModel->addImage($articleId, $relativePath, $altText);
             $_SESSION['success'] = 'Image ajoutée avec succès';

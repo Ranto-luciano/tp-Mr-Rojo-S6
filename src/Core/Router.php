@@ -86,7 +86,44 @@ class Router
 			throw new \RuntimeException('Controller method not found: ' . $handler);
 		}
 
-		$controller->{$action}(...array_values($params));
+		$args = $this->coerceArguments($controller, $action, array_values($params));
+		$controller->{$action}(...$args);
+	}
+
+	private function coerceArguments(object $controller, string $action, array $args): array
+	{
+		$method = new \ReflectionMethod($controller, $action);
+		$parameters = $method->getParameters();
+		$coerced = [];
+
+		foreach ($parameters as $index => $parameter) {
+			$value = $args[$index] ?? null;
+			$type = $parameter->getType();
+
+			if (!$type instanceof \ReflectionNamedType || $type->isBuiltin() === false || $value === null) {
+				$coerced[] = $value;
+				continue;
+			}
+
+			switch ($type->getName()) {
+				case 'int':
+					$coerced[] = (int) $value;
+					break;
+				case 'float':
+					$coerced[] = (float) $value;
+					break;
+				case 'bool':
+					$coerced[] = filter_var($value, FILTER_VALIDATE_BOOLEAN, FILTER_NULL_ON_FAILURE) ?? false;
+					break;
+				case 'string':
+					$coerced[] = (string) $value;
+					break;
+				default:
+					$coerced[] = $value;
+			}
+		}
+
+		return $coerced;
 	}
 
 	private function resolveControllerClass(string $controllerClass): string

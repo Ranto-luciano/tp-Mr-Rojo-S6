@@ -112,8 +112,28 @@ INNER JOIN categories c ON c.slug = data.category_slug
 INNER JOIN users u ON u.email = 'admin@example.com'
 ON CONFLICT (slug) DO NOTHING;
 
+-- Seed uploaded files committed in storage/uploads with high priority.
 INSERT INTO article_images (article_id, file_path, alt_text, sort_order)
-SELECT a.id, '/assets/images/placeholders/og-default.jpg', a.title, 1
+SELECT a.id, data.file_path, data.alt_text, data.sort_order
+FROM (
+	VALUES
+		(
+			'iran-renforce-dispositif-interieur-risque-contestation',
+			'articles/seed/og-default.svg',
+			'Iran renforce son dispositif interieur face au risque de contestation',
+			0
+		)
+) AS data(slug, file_path, alt_text, sort_order)
+INNER JOIN articles a ON a.slug = data.slug
+AND NOT EXISTS (
+	SELECT 1
+	FROM article_images ai
+	WHERE ai.article_id = a.id
+	AND ai.file_path = data.file_path
+);
+
+INSERT INTO article_images (article_id, file_path, alt_text, sort_order)
+SELECT a.id, 'articles/seed/og-default.svg', a.title, 1
 FROM articles a
 WHERE a.slug IN (
 	'iran-renforce-dispositif-interieur-risque-contestation',
