@@ -299,6 +299,74 @@ h3 {
 	overflow: hidden;
 }
 
+.article-gallery {
+	margin: 1.2rem 0 0.8rem;
+}
+
+.gallery-carousel {
+	position: relative;
+	background: #fff;
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	padding: 0.85rem 2.8rem;
+}
+
+.gallery-track {
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: minmax(70%, 1fr);
+	gap: 0.8rem;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	padding-bottom: 0.2rem;
+	scrollbar-width: thin;
+}
+
+.gallery-item {
+	margin: 0;
+	border-radius: 10px;
+	overflow: hidden;
+	border: 1px solid var(--line);
+	background: #f7f7f5;
+	scroll-snap-align: center;
+	aspect-ratio: 16 / 9;
+}
+
+.gallery-item img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+}
+
+.gallery-control {
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	width: 2.2rem;
+	height: 2.2rem;
+	border-radius: 999px;
+	border: 1px solid var(--line);
+	background: #fff;
+	color: var(--text);
+	font-size: 1.2rem;
+	font-weight: 700;
+	cursor: pointer;
+	box-shadow: 0 8px 16px rgba(0, 0, 0, 0.08);
+}
+
+.gallery-control.prev {
+	left: 0.6rem;
+}
+
+.gallery-control.next {
+	right: 0.6rem;
+}
+
+.gallery-control:disabled {
+	opacity: 0.45;
+	cursor: default;
+}
+
 .article-body p {
 	margin: 0.45rem 0 0.85rem;
 }
@@ -370,6 +438,10 @@ h3 {
 
 	.footer-grid {
 		grid-template-columns: 1.5fr 1fr;
+	}
+
+	.gallery-track {
+		grid-auto-columns: minmax(50%, 1fr);
 	}
 }
 

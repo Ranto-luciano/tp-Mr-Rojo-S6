@@ -119,9 +119,183 @@ FROM (
 	VALUES
 		(
 			'iran-renforce-dispositif-interieur-risque-contestation',
-			'articles/seed/og-default.svg',
+			'articles/article1/image1.jpg',
 			'Iran renforce son dispositif interieur face au risque de contestation',
 			0
+		),
+		(
+			'iran-renforce-dispositif-interieur-risque-contestation',
+			'articles/article1/image2.jpg',
+			'Iran renforce son dispositif interieur face au risque de contestation',
+			1
+		),
+		(
+			'iran-renforce-dispositif-interieur-risque-contestation',
+			'articles/article1/image3.webp',
+			'Iran renforce son dispositif interieur face au risque de contestation',
+			2
+		),
+		(
+			'iran-renforce-dispositif-interieur-risque-contestation',
+			'articles/article1/image4.jpg',
+			'Iran renforce son dispositif interieur face au risque de contestation',
+			3
+		),
+		(
+			'iran-renforce-dispositif-interieur-risque-contestation',
+			'articles/article1/image5.jpg',
+			'Iran renforce son dispositif interieur face au risque de contestation',
+			4
+		),
+		(
+			'washington-teheran-propositions-paix-contestees',
+			'articles/article2/image10.jfif',
+			'Washington et Teheran: les propositions de paix restent contestees',
+			0
+		),
+		(
+			'washington-teheran-propositions-paix-contestees',
+			'articles/article2/image2.avif',
+			'Washington et Teheran: les propositions de paix restent contestees',
+			1
+		),
+		(
+			'washington-teheran-propositions-paix-contestees',
+			'articles/article2/image4.jpeg',
+			'Washington et Teheran: les propositions de paix restent contestees',
+			2
+		),
+		(
+			'washington-teheran-propositions-paix-contestees',
+			'articles/article2/image5.jpg',
+			'Washington et Teheran: les propositions de paix restent contestees',
+			3
+		),
+		(
+			'washington-teheran-propositions-paix-contestees',
+			'articles/article2/image9.jpg',
+			'Washington et Teheran: les propositions de paix restent contestees',
+			4
+		),
+		(
+			'conflit-regional-pese-perspectives-economiques-internationales',
+			'articles/article3/image1.avif',
+			'Le conflit regional pese sur les perspectives economiques internationales',
+			0
+		),
+		(
+			'conflit-regional-pese-perspectives-economiques-internationales',
+			'articles/article3/image2.avif',
+			'Le conflit regional pese sur les perspectives economiques internationales',
+			1
+		),
+		(
+			'conflit-regional-pese-perspectives-economiques-internationales',
+			'articles/article3/image4.jpg',
+			'Le conflit regional pese sur les perspectives economiques internationales',
+			2
+		),
+		(
+			'conflit-regional-pese-perspectives-economiques-internationales',
+			'articles/article3/image5.jfif',
+			'Le conflit regional pese sur les perspectives economiques internationales',
+			3
+		),
+		(
+			'conflit-regional-pese-perspectives-economiques-internationales',
+			'articles/article3/image8.jpg',
+			'Le conflit regional pese sur les perspectives economiques internationales',
+			4
+		),
+		(
+			'choc-industriel-installations-aluminium-coeur-tensions',
+			'articles/article4/image1.jpg',
+			'Choc industriel: des installations d aluminium au coeur des tensions',
+			0
+		),
+		(
+			'choc-industriel-installations-aluminium-coeur-tensions',
+			'articles/article4/image2.jpg',
+			'Choc industriel: des installations d aluminium au coeur des tensions',
+			1
+		),
+		(
+			'choc-industriel-installations-aluminium-coeur-tensions',
+			'articles/article4/image3.jpg',
+			'Choc industriel: des installations d aluminium au coeur des tensions',
+			2
+		),
+		(
+			'choc-industriel-installations-aluminium-coeur-tensions',
+			'articles/article4/image4.jfif',
+			'Choc industriel: des installations d aluminium au coeur des tensions',
+			3
+		),
+		(
+			'choc-industriel-installations-aluminium-coeur-tensions',
+			'articles/article4/image5.jpeg',
+			'Choc industriel: des installations d aluminium au coeur des tensions',
+			4
+		),
+		(
+			'presence-militaire-accrue-moyen-orient-nouvel-equilibre-dissuasion',
+			'articles/article5/image1.jpg',
+			'Presence militaire accrue au Moyen-Orient: nouvel equilibre de dissuasion',
+			0
+		),
+		(
+			'presence-militaire-accrue-moyen-orient-nouvel-equilibre-dissuasion',
+			'articles/article5/image2.jpg',
+			'Presence militaire accrue au Moyen-Orient: nouvel equilibre de dissuasion',
+			1
+		),
+		(
+			'presence-militaire-accrue-moyen-orient-nouvel-equilibre-dissuasion',
+			'articles/article5/image3.webp',
+			'Presence militaire accrue au Moyen-Orient: nouvel equilibre de dissuasion',
+			2
+		),
+		(
+			'presence-militaire-accrue-moyen-orient-nouvel-equilibre-dissuasion',
+			'articles/article5/image4.webp',
+			'Presence militaire accrue au Moyen-Orient: nouvel equilibre de dissuasion',
+			3
+		),
+		(
+			'presence-militaire-accrue-moyen-orient-nouvel-equilibre-dissuasion',
+			'articles/article5/image5.jfif',
+			'Presence militaire accrue au Moyen-Orient: nouvel equilibre de dissuasion',
+			4
+		),
+		(
+			'pression-sociale-gestion-crise-quotidien-surveillance-renforcee',
+			'articles/article6/image1.webp',
+			'Pression sociale et gestion de crise: le quotidien sous surveillance renforcee',
+			0
+		),
+		(
+			'pression-sociale-gestion-crise-quotidien-surveillance-renforcee',
+			'articles/article6/image2.webp',
+			'Pression sociale et gestion de crise: le quotidien sous surveillance renforcee',
+			1
+		),
+		(
+			'pression-sociale-gestion-crise-quotidien-surveillance-renforcee',
+			'articles/article6/image3.jpg',
+			'Pression sociale et gestion de crise: le quotidien sous surveillance renforcee',
+			2
+		),
+		(
+			'pression-sociale-gestion-crise-quotidien-surveillance-renforcee',
+			'articles/article6/image4.webp',
+			'Pression sociale et gestion de crise: le quotidien sous surveillance renforcee',
+			3
+		),
+		(
+			'pression-sociale-gestion-crise-quotidien-surveillance-renforcee',
+			'articles/article6/image5.jpg',
+			'Pression sociale et gestion de crise: le quotidien sous surveillance renforcee',
+			4
 		)
 ) AS data(slug, file_path, alt_text, sort_order)
 INNER JOIN articles a ON a.slug = data.slug

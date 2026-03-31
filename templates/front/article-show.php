@@ -27,6 +27,7 @@ if (!$article) {
 
 $menuCategories = category_all_with_counts();
 $related = article_related((string) $article['category_slug'], (string) $article['slug'], 3);
+$gallery = article_images_by_slug((string) $article['slug']);
 
 $description = excerpt_text((string) ($article['excerpt'] ?: $article['content']), 155);
 $seo = seo_merge([
@@ -60,6 +61,29 @@ ob_start();
 			height="675"
 		>
 	</figure>
+
+	<?php if ($gallery !== []): ?>
+		<section class="article-gallery" aria-label="Galerie photo">
+			<div class="section-head">
+				<h2>Galerie photo</h2>
+			</div>
+			<div class="gallery-carousel" data-carousel>
+				<button class="gallery-control prev" type="button" data-carousel-prev aria-label="Image precedente">‹</button>
+				<div class="gallery-track" data-carousel-track>
+					<?php foreach ($gallery as $image): ?>
+						<figure class="gallery-item">
+							<img
+								src="<?= e($image['file_path'] ?: '/assets/images/placeholders/og-default.jpg') ?>"
+								alt="<?= e($image['alt_text'] ?: $article['title']) ?>"
+								loading="lazy"
+							>
+						</figure>
+					<?php endforeach; ?>
+				</div>
+				<button class="gallery-control next" type="button" data-carousel-next aria-label="Image suivante">›</button>
+			</div>
+		</section>
+	<?php endif; ?>
 
 	<section class="article-body">
 		<h2>Resume</h2>

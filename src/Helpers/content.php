@@ -52,6 +52,11 @@ function article_related(string $categorySlug, string $excludeSlug, int $limit =
     return article_model()->article_related($categorySlug, $excludeSlug, $limit);
 }
 
+function article_images_by_slug(string $slug): array
+{
+    return article_model()->article_images_by_slug($slug);
+}
+
 function article_sitemap_items(): array
 {
     return article_model()->article_sitemap_items();

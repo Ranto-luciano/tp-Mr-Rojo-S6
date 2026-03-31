@@ -76,7 +76,33 @@ class Article
         ");
 
         $stmt->execute(['article_id' => $articleId]);
-        return $stmt->fetchAll();
+        $rows = $stmt->fetchAll() ?: [];
+        return $this->normalizeImageList($rows);
+    }
+
+    public function article_images_by_slug(string $slug): array
+    {
+        $slug = trim($slug);
+        if ($slug === '' || !$this->db instanceof PDO) {
+            return [];
+        }
+
+        $sql = <<<SQL
+		SELECT
+			ai.file_path,
+			COALESCE(NULLIF(ai.alt_text, ''), a.title) AS alt_text,
+			ai.sort_order
+		FROM article_images ai
+		INNER JOIN articles a ON a.id = ai.article_id
+		WHERE a.slug = :slug
+		ORDER BY ai.sort_order ASC, ai.id ASC
+	SQL;
+
+        $stmt = $this->db->prepare($sql);
+        $stmt->execute(['slug' => $slug]);
+        $rows = $stmt->fetchAll() ?: [];
+
+        return $this->normalizeImageList($rows);
     }
 
     public function create(array $data, int $authorId): int
@@ -225,6 +251,18 @@ class Article
         unset($article);
 
         return $articles;
+    }
+
+    private function normalizeImageList(array $images): array
+    {
+        foreach ($images as &$image) {
+            if (array_key_exists('file_path', $image)) {
+                $image['file_path'] = $this->toPublicImagePath($image['file_path']);
+            }
+        }
+        unset($image);
+
+        return $images;
     }
 
     private function generateSlug(string $title): string
